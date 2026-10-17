@@ -1,0 +1,7 @@
+build/
+code
+MiniVim
+*.o
+vtemu/
+*.pdf
+test/
