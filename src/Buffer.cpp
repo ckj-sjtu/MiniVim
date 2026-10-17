@@ -10,6 +10,14 @@ Buffer::Buffer(const std::filesystem::path& path):path_{path}{
     if(!path.empty()){
         std::ifstream in(path, std::ios::binary);
         if(in){
+            in.seekg(0, std::ios::end);
+            if(in.tellg() > 0){
+                in.seekg(-1, std::ios::end);
+                char last_char;
+                in.get(last_char);
+                if(last_char == '\n') ends_with_newline_ = true;
+                in.seekg(0, std::ios::beg);
+            }
             std::string line;
             while(std::getline(in, line)){
                 if(!line.empty() && line.back() == '\r') line.pop_back();
@@ -57,7 +65,7 @@ void Buffer::InsertCharacter(std::size_t row, std::size_t column, char value) {
 void Buffer::EraseCharacter(std::size_t row, std::size_t column) {
    //在第row行第col列删除一个value
    if(lines_.size() > row && lines_[row].size() > column){
-    lines_[row].erase(column);
+    lines_[row].erase(column, 1);
     modified_ = true;
    } 
 }
@@ -106,7 +114,7 @@ void Buffer::WriteTo(const std::filesystem::path& path) const {
    if(!out_file.is_open()) return;
    for(std::size_t i = 0; i < lines_.size(); i++){
     out_file << lines_[i];
-    if(i < lines_.size() - 1) out_file << '\n';
+    if(i < lines_.size() - 1 || modified_ || ends_with_newline_) out_file << '\n';
    }
 }
 

@@ -137,7 +137,7 @@ void Editor::HandleInsert(KeyEvent key) {
         } 
         else if(cursor.column_ == 0 && cursor.row_ > 0){
             std::size_t len{buffer_.GetLineAt(cursor.row_ - 1).size()};
-            buffer_.JoinLine(cursor.row_);
+            buffer_.JoinLine(cursor.row_ - 1);
             cursor.row_--;
             cursor.column_ = len;
             window_.SetCursor(buffer_, cursor, true);

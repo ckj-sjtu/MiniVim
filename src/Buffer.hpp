@@ -34,6 +34,7 @@ private:
     bool modified_ = false;
     std::vector<std::string> lines_; //文件每行的字符内容,不包含末尾换行符
     std::filesystem::path path_;    //打开文件的路径
+    bool ends_with_newline_{false};
 };
 
 } // namespace sjtu
